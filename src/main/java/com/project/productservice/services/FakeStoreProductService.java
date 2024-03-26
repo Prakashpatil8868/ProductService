@@ -6,6 +6,8 @@ import com.project.productservice.Exceptions.ProductNotFoundExceptions;
 import com.project.productservice.models.Category;
 import com.project.productservice.models.Product;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Primary
+@Qualifier("fakeStoreProductService")
 public class FakeStoreProductService implements IProductService{
     RestTemplate restTemplate;
     @Autowired
@@ -25,7 +29,7 @@ public class FakeStoreProductService implements IProductService{
 public Product getProductFromResponseDTO(ResponseDTO responseDTO){
       Product product=new Product();
       product.setId(responseDTO.getId());
-      product.setName(responseDTO.getTitle());
+      product.setTitle(responseDTO.getTitle());
       product.setDescription(responseDTO.getDescription());
       product.setPrice(responseDTO.getPrice());
       product.setCategory(new Category());
@@ -58,6 +62,17 @@ public Product getProductFromResponseDTO(ResponseDTO responseDTO){
       }
         return products;
     }
+
+    @Override
+    public Product addProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        return null;
+    }
+
     @Override
     public Product replaceProduct(Long id, RequestDTO requestDTO){
             RequestCallback requestCallback = restTemplate.httpEntityCallback(requestDTO,ResponseDTO.class);

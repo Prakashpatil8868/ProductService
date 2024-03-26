@@ -6,6 +6,7 @@ import com.project.productservice.models.Category;
 import com.project.productservice.models.Product;
 import com.project.productservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class ProductController {
     IProductService productService;
 
     @Autowired
-    public ProductController(IProductService productService){
+    public ProductController(@Qualifier("selfProductService") IProductService productService){
         this.productService=productService;
     }
 
@@ -56,12 +57,31 @@ ResponseEntity responseEntity;
     }
     @PostMapping("/add")
     public Product addProduct(@RequestBody RequestDTO requestDTO){
-        return new Product();
+        Product product=new Product();
+        product.setTitle(requestDTO.getTitle());
+        product.setPrice(requestDTO.getPrice());
+        product.setDescription(requestDTO.getDescription());
+        product.setImageUrl(requestDTO.getImage());
+
+        product.setCategory(new Category());
+        product.getCategory().setName(requestDTO.getCategory());
+
+       Product savedProduct= productService.addProduct(product);
+        return savedProduct;
     }
 
 
     @PatchMapping("/update/{id}")
 public Product updateProduct(@PathVariable("id") Long id, @RequestBody RequestDTO requestDTO){
+        Product product=new Product();
+        product.setTitle(requestDTO.getTitle());
+        product.setPrice(requestDTO.getPrice());
+        product.setDescription(requestDTO.getDescription());
+        product.setImageUrl(requestDTO.getImage());
+
+        product.setCategory(new Category());
+        product.getCategory().setName(requestDTO.getCategory());
+
         return new Product();
 }
 
